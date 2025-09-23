@@ -1,5 +1,6 @@
 # Residentes: 
 Nathan Cristino;
+Gabriel Speridião dos Santos;
 
 
 
