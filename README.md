@@ -52,3 +52,5 @@ O programa solicita ao usuário, via console ou arquivo, os nomes dos arquivos d
 
 O projeto inclui o diagrama de classes UML para melhor visualização da arquitetura desenvolvida.
 
+
+<img width="1095" height="675" alt="Diagrama_Poo_2" src="https://github.com/user-attachments/assets/d6de2451-461f-4513-a955-f0492ff45c90" />
