@@ -56,16 +56,9 @@ SELECT * FROM ProjetoFinal.Funcionario;
 
 SELECT * FROM ProjetoFinal.Dependentes;
 
-ALTER TABLE ProjetoFinal.FolhaPagamento
-DROP CONSTRAINT folhapagamento_funcionario_fkey,
-ADD CONSTRAINT folhapagamento_funcionario_fkey
-FOREIGN KEY (funcionario)
-REFERENCES ProjetoFinal.Funcionario(id)
-ON DELETE CASCADE;
+SELECT f.id, f.nome, f.cpf, f.data_nascimento, fp.data_pagamento, fp.desconto_inss, fp.desconto_ir, fp.salario_liquido
+FROM ProjetoFinal.Funcionario f
+LEFT JOIN ProjetoFinal.FolhaPagamento fp on fp.funcionario = f.id;
 
-ALTER TABLE ProjetoFinal.Dependente
-DROP CONSTRAINT dependente_funcionario_id_fkey,
-ADD CONSTRAINT dependente_funcionario_id_fkey
-FOREIGN KEY (funcionario_id)
-REFERENCES ProjetoFinal.Funcionario(id)
-ON DELETE CASCADE;
+
+
