@@ -4,11 +4,8 @@
 - João Gabriel Menezes Marra;
 - Claudiane Sutil;
 - Lucas Falco;
-- José Arthur Freitas
-  
-
-
-
+- José Arthur Freitas;
+- Alex José Fonseca.
 
 # Projeto Final - Programação Orientada a Objetos
 
