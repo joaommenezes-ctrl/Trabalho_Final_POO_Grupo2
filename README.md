@@ -2,6 +2,7 @@
 - Nathan Cristino;
 - Gabriel Speridião dos Santos;
 - João Gabriel Menezes Marra;
+- Claudiane Sutil;
 
 
 
