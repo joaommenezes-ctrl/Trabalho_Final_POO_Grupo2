@@ -1,3 +1,9 @@
+Residentes: 
+Nathan Cristino
+
+
+
+
 # Projeto Final - Programação Orientada a Objetos
 
 Este projeto foi desenvolvido como trabalho final da disciplina de **Programação Orientada a Objetos**. O objetivo é consolidar e demonstrar a aplicação dos principais conceitos de POO vistos ao longo do curso, por meio da criação de um sistema para cálculo do salário líquido de funcionários de uma empresa, considerando descontos e abatimentos de dependentes.
