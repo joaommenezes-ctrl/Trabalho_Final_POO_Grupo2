@@ -3,6 +3,7 @@
 - Gabriel Speridião dos Santos;
 - João Gabriel Menezes Marra;
 - Claudiane Sutil;
+- Lucas Falco;
 
 
 
