@@ -4,6 +4,8 @@
 - João Gabriel Menezes Marra;
 - Claudiane Sutil;
 - Lucas Falco;
+- José Arthur Freitas
+  
 
 
 
