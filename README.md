@@ -1,6 +1,7 @@
 # Residentes: 
-Nathan Cristino;
-Gabriel Speridião dos Santos;
+- Nathan Cristino;
+- Gabriel Speridião dos Santos;
+- João Gabriel Menezes Marra;
 
 
 
