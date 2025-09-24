@@ -31,49 +31,64 @@ public class ConnectionBD {
 	}
 
 	private static void criarSchemaETabelas() {
-		String sql = """
-				CREATE SCHEMA IF NOT EXISTS ProjetoFinal;
+	    try (Statement stmt = connection.createStatement()) {
+	       
+	        stmt.executeUpdate("CREATE SCHEMA IF NOT EXISTS ProjetoFinal;");
 
-				DO $$
-				BEGIN
-				    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'parentesco_enum') THEN
-				        CREATE TYPE ProjetoFinal.Parentesco_Enum AS ENUM ('FILHO', 'SOBRINHO', 'OUTROS');
-				    END IF;
-				END$$;
+	        
+	        var rs = stmt.executeQuery(
+	            "SELECT 1 FROM pg_type t JOIN pg_namespace n ON t.typnamespace = n.oid " +
+	            "WHERE t.typname = 'parentesco_enum' AND n.nspname = 'ProjetoFinal';"
+	        );
 
-				CREATE TABLE IF NOT EXISTS ProjetoFinal.Funcionario (
-				    id SERIAL PRIMARY KEY,
-				    nome TEXT NOT NULL,
-				    cpf VARCHAR(11) UNIQUE NOT NULL,
-				    data_nascimento DATE NOT NULL,
-				    salario_bruto NUMERIC(15,2) NOT NULL DEFAULT 0
-				);
+	        if (!rs.next()) {
+	            stmt.executeUpdate(
+	                "CREATE TYPE ProjetoFinal.parentesco_enum AS ENUM ('FILHO', 'SOBRINHO', 'OUTROS');"
+	            );
+	            System.out.println("Tipo criado com sucesso.");
+	        } else {
+	            System.out.println("Tipo parentesco_enum já existe.");
+	        }
 
-				CREATE TABLE IF NOT EXISTS ProjetoFinal.Dependentes (
-				    id SERIAL PRIMARY KEY,
-				    nome TEXT NOT NULL,
-				    cpf VARCHAR(11) UNIQUE NOT NULL,
-				    data_nascimento DATE NOT NULL,
-				    parentesco ProjetoFinal.Parentesco_Enum NOT NULL,
-				    funcionario_id INTEGER NOT NULL REFERENCES ProjetoFinal.Funcionario(id) ON DELETE CASCADE
-				);
+	       
+	        stmt.executeUpdate(
+	            "CREATE TABLE IF NOT EXISTS ProjetoFinal.Funcionario (" +
+	            "id SERIAL PRIMARY KEY," +
+	            "nome TEXT NOT NULL," +
+	            "cpf VARCHAR(11) UNIQUE NOT NULL," +
+	            "data_nascimento DATE NOT NULL," +
+	            "salario_bruto NUMERIC(15,2) NOT NULL" +
+	            ");"
+	        );
 
-				CREATE TABLE IF NOT EXISTS ProjetoFinal.FolhaPagamento (
-				    id SERIAL PRIMARY KEY,
-				    funcionario INTEGER NOT NULL REFERENCES ProjetoFinal.Funcionario(id) ON DELETE CASCADE,
-				    data_pagamento DATE NOT NULL,
-				    desconto_inss NUMERIC(15,2) NOT NULL,
-				    desconto_ir NUMERIC(15,2) NOT NULL,
-				    salario_liquido NUMERIC(15,2) NOT NULL
-				);
-				""";
+	        stmt.executeUpdate(
+	            "CREATE TABLE IF NOT EXISTS ProjetoFinal.Dependentes (" +
+	            "id SERIAL PRIMARY KEY," +
+	            "parentesco ProjetoFinal.parentesco_enum NOT NULL," +
+	            "nome TEXT NOT NULL," +
+	            "cpf VARCHAR(11) UNIQUE NOT NULL," +
+	            "data_nascimento DATE NOT NULL," +
+	            "cod_funcionario INTEGER REFERENCES ProjetoFinal.Funcionario(id) ON DELETE CASCADE" +
+	            ");"
+	        );
 
-		try (Statement stmt = connection.createStatement()) {
-			stmt.executeUpdate(sql);
-			System.out.println("Schema e tabelas verificados/criados com sucesso!\n");
-		} catch (SQLException e) {
-			System.err.println("Erro ao criar schema/tabelas!");
-			e.printStackTrace();
-		}
+	        stmt.executeUpdate(
+	            "CREATE TABLE IF NOT EXISTS ProjetoFinal.FolhaPagamento (" +
+	            "id SERIAL PRIMARY KEY," +
+	            "funcionario INTEGER NOT NULL REFERENCES ProjetoFinal.Funcionario(id) ON DELETE CASCADE," +
+	            "data_pagamento DATE NOT NULL," +
+	            "desconto_inss NUMERIC(15,2) NOT NULL," +
+	            "desconto_ir NUMERIC(15,2) NOT NULL," +
+	            "salario_liquido NUMERIC(15,2) NOT NULL" +
+	            ");"
+	        );
+
+	        System.out.println("Schema e tabelas criadas/verificadas com sucesso!\n");
+
+	    } catch (SQLException e) {
+	        System.err.println("Erro ao criar schema/tabelas!");
+	        e.printStackTrace();
+	    }
 	}
 }
+
