@@ -2,6 +2,7 @@ package BancoDeDados;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -32,25 +33,22 @@ public class ConnectionBD {
 
 	private static void criarSchemaETabelas() {
 	    try (Statement stmt = connection.createStatement()) {
-	       
+
+	        
 	        stmt.executeUpdate("CREATE SCHEMA IF NOT EXISTS ProjetoFinal;");
 
 	        
-	        var rs = stmt.executeQuery(
-	            "SELECT 1 FROM pg_type t JOIN pg_namespace n ON t.typnamespace = n.oid " +
-	            "WHERE t.typname = 'parentesco_enum' AND n.nspname = 'ProjetoFinal';"
-	        );
+	        try (ResultSet rs = stmt.executeQuery(
+	        	    "SELECT 1 FROM pg_type WHERE typname = 'parentesco_enum';"
+	        	)) {
+	        	    if (!rs.next()) {
+	        	        stmt.executeUpdate(
+	        	            "CREATE TYPE ProjetoFinal.parentesco_enum AS ENUM ('FILHO', 'SOBRINHO', 'OUTROS');"
+	        	        );
+	        	    }
+	        	}
 
-	        if (!rs.next()) {
-	            stmt.executeUpdate(
-	                "CREATE TYPE ProjetoFinal.parentesco_enum AS ENUM ('FILHO', 'SOBRINHO', 'OUTROS');"
-	            );
-	            System.out.println("Tipo criado com sucesso.");
-	        } else {
-	            System.out.println("Tipo parentesco_enum já existe.");
-	        }
-
-	       
+	    
 	        stmt.executeUpdate(
 	            "CREATE TABLE IF NOT EXISTS ProjetoFinal.Funcionario (" +
 	            "id SERIAL PRIMARY KEY," +
@@ -61,6 +59,7 @@ public class ConnectionBD {
 	            ");"
 	        );
 
+	       
 	        stmt.executeUpdate(
 	            "CREATE TABLE IF NOT EXISTS ProjetoFinal.Dependentes (" +
 	            "id SERIAL PRIMARY KEY," +
@@ -72,6 +71,7 @@ public class ConnectionBD {
 	            ");"
 	        );
 
+	        
 	        stmt.executeUpdate(
 	            "CREATE TABLE IF NOT EXISTS ProjetoFinal.FolhaPagamento (" +
 	            "id SERIAL PRIMARY KEY," +
@@ -91,4 +91,3 @@ public class ConnectionBD {
 	    }
 	}
 }
-
